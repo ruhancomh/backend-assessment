@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --passWithNoTests --silent --runInBand",
-    "start": "./node_modules/.bin/sucrase-node index.ts"
+    "start": "./node_modules/.bin/sucrase-node src/main/server.ts"
   },
   "author": "Ruhan de Oliveira Baiense",
   "license": "ISC",
