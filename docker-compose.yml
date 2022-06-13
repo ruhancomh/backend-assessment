@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+  database:
+    image: mongo
+    container_name: backend-assessment-mongo
+    restart: always
+    ports:
+      - "27017:27017" 
+    networks:
+      - private-network
+  
+  app:
+    build: .
+    image: backend-assessment/node
+    restart: always
+    container_name: backend-assessment-node
+    environment:
+      SERVER_PORT: 3000
+    command: npm start
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/usr/app
+      - /usr/app/node_modules
+    networks:
+      - private-network
+    depends_on:
+      - database
+  
+networks:
+  private-network:
+    name: private-network
+    driver: bridge
