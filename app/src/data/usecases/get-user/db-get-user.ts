@@ -1,9 +1,9 @@
 import { IUserModel } from '../../../domain/models/user-model'
-import { GetUser } from '../../../domain/usecases/get-user'
+import { IGetUser } from '../../../domain/usecases/get-user'
 import { UserNotFoundError } from '../../errors/user-not-found-error'
 import { IUserRepository } from '../../protocols/repositories/user-repository'
 
-export class DbGetUser implements GetUser {
+export class DbGetUser implements IGetUser {
   private readonly userRepository: IUserRepository
 
   constructor (userRepository: IUserRepository) {

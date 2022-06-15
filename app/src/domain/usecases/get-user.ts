@@ -1,5 +1,5 @@
 import { IUserModel } from '../models/user-model'
 
-export interface GetUser {
+export interface IGetUser {
   get: (id: string) => Promise<IUserModel>
 }
