@@ -5,6 +5,7 @@ import { responseError, responseOk } from '../../helpers/http-response-helper'
 import { BaseController } from '../../protocols/base-controller'
 import { HttpRequest } from '../../protocols/http-request'
 import { HttpResponse } from '../../protocols/http-response'
+import { IGetUserResponse } from '../../protocols/responses/get-user-response'
 
 export class GetUserController implements BaseController {
   private readonly getUser: IGetUser
@@ -18,7 +19,13 @@ export class GetUserController implements BaseController {
       const userId = httRequest.params.userId
       const user = await this.getUser.get(userId)
 
-      return responseOk(user)
+      const getUserResponse: IGetUserResponse = {
+        id: user.id,
+        username: user.username,
+        createdAt: user.createdAt?.toISOString() ?? ''
+      }
+
+      return responseOk(getUserResponse)
     } catch (error) {
       if (error instanceof UserNotFoundError) {
         return responseError(new ResourceNotFoundError(error.message))

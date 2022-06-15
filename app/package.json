@@ -8,6 +8,7 @@
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- -c jest-unit-config.js",
     "test:integration": "npm test -- -c jest-integration-config.js",
+    "test:integration:verbose": "npm run test:verbose -- -c jest-integration-config.js",
     "start": "./node_modules/.bin/sucrase-node src/main/server.ts"
   },
   "author": "Ruhan de Oliveira Baiense",
