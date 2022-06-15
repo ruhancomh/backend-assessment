@@ -1,8 +1,6 @@
-import { ApiError } from '../protocols/api-error'
+import { BaseApiError } from './base-api-error'
 
-export class BadRequestError extends Error implements ApiError {
-  statusCode: number
-
+export class BadRequestError extends BaseApiError {
   constructor (message: string) {
     super(message)
     this.name = 'BadRequestError'

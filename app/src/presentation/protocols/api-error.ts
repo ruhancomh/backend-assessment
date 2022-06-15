@@ -1,3 +1,5 @@
-export interface ApiError extends Error{
+export interface ApiError extends Error {
+  message: string
+  name: string
   statusCode: number
 }
