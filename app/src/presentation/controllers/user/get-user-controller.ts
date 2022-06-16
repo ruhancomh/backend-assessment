@@ -1,3 +1,4 @@
+import dateFormat from 'dateformat'
 import { UserNotFoundError } from '../../../data/errors/user-not-found-error'
 import { IGetUser } from '../../../domain/usecases/get-user'
 import { ResourceNotFoundError } from '../../errors/resource-not-found-error'
@@ -6,7 +7,6 @@ import { BaseController } from '../../protocols/base-controller'
 import { HttpRequest } from '../../protocols/http-request'
 import { HttpResponse } from '../../protocols/http-response'
 import { IUserResponse } from '../../protocols/responses/user-response'
-
 export class GetUserController implements BaseController {
   private readonly getUser: IGetUser
 
@@ -22,7 +22,8 @@ export class GetUserController implements BaseController {
       const getUserResponse: IUserResponse = {
         id: user.id,
         username: user.username,
-        createdAt: user.createdAt?.toISOString() ?? ''
+        createdAt: user.createdAt?.toISOString() ?? '',
+        createdAtFormated: dateFormat(user.createdAt, 'mediumDate')
       }
 
       return responseOk(getUserResponse)

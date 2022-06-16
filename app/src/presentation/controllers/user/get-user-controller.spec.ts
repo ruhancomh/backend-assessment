@@ -28,7 +28,8 @@ describe('GetUser Controller', () => {
     const expectedUser: IUserResponse = {
       id: '507f191e810c19729de860ea',
       username: 'foo_bar',
-      createdAt: '2022-06-13T13:00:00.000Z'
+      createdAt: '2022-06-13T13:00:00.000Z',
+      createdAtFormated: 'Jun 13, 2022'
     }
 
     // Act

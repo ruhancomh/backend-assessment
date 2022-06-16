@@ -33,6 +33,7 @@ describe('User Routes', () => {
         expect(res.body.id).toBe(userData.id)
         expect(res.body.username).toBe(userData.username)
         expect(res.body.createdAt).toBeTruthy()
+        expect(res.body.createdAtFormated).toBeTruthy()
       })
   })
 
