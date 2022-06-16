@@ -130,4 +130,24 @@ describe('User Routes', () => {
         expect(res.body.statusCode).toBe(400)
       })
   })
+
+  test('Should return 400 on createUser if username exceed the maximum size', async () => {
+    // Arrange
+    const requestData = {
+      username: 'foo_bar_foo_bar_foo_bar'
+    }
+
+    // Act & Assert
+    await request(app)
+      .post('/api/v1/users/')
+      .send(requestData)
+      .expect(400)
+      .expect((res) => {
+        expect(res.body).toEqual({
+          message: 'Param <username> exceeded the maximum size of <14>',
+          name: 'MaximumParamSizeError',
+          statusCode: 400
+        })
+      })
+  })
 })
