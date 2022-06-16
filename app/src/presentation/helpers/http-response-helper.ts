@@ -24,3 +24,10 @@ export const responseOk = (data: any): HttpResponse => {
     body: data
   }
 }
+
+export const responseCreated = (data: any): HttpResponse => {
+  return {
+    statusCode: 201,
+    body: data
+  }
+}
