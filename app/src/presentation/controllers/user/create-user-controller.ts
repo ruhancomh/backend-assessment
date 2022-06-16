@@ -6,16 +6,21 @@ import { BaseController } from '../../protocols/base-controller'
 import { HttpRequest } from '../../protocols/http-request'
 import { HttpResponse } from '../../protocols/http-response'
 import { IUserResponse } from '../../protocols/responses/user-response'
+import { Validator } from '../../protocols/validator'
 
 export class CreateUserController implements BaseController {
   private readonly createUser: ICreateUser
+  private readonly validator: Validator
 
-  constructor (createUser: ICreateUser) {
+  constructor (createUser: ICreateUser, validator: Validator) {
     this.createUser = createUser
+    this.validator = validator
   }
 
   async handle (httRequest: HttpRequest): Promise<HttpResponse> {
     try {
+      this.validator.validate(httRequest)
+
       const username = httRequest.body.username
 
       const userCreated = await this.createUser.create({

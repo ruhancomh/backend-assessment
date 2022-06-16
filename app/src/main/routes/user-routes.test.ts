@@ -90,4 +90,44 @@ describe('User Routes', () => {
         expect(res.body.createdAt).toBeTruthy()
       })
   })
+
+  test('Should return 400 on createUser without required username', async () => {
+    // Arrange
+    const requestData = {}
+
+    // Act & Assert
+    await request(app)
+      .post('/api/v1/users/')
+      .send(requestData)
+      .expect(400)
+      .expect((res) => {
+        expect(res.body).toEqual({
+          message: 'Missing param: username',
+          name: 'MissingParamError',
+          statusCode: 400
+        })
+      })
+  })
+
+  test('Should return 400 on createUser with duplicated username', async () => {
+    // Arrange
+    const userData = new UserMongoModel()
+    userData.username = 'foo_bar'
+    await userData.save()
+
+    const requestData = {
+      username: 'foo_bar'
+    }
+
+    // Act & Assert
+    await request(app)
+      .post('/api/v1/users/')
+      .send(requestData)
+      .expect(400)
+      .expect((res) => {
+        expect(res.body.message).toBeTruthy()
+        expect(res.body.name).toBe('BadRequestError')
+        expect(res.body.statusCode).toBe(400)
+      })
+  })
 })

@@ -5,6 +5,7 @@ import { DuplicateKeyError } from '../../../infra/errors/duplicate-key-error'
 import { BadRequestError } from '../../errors/bad-request-error'
 import { InternalServerError } from '../../errors/internal-server-error'
 import { HttpRequest } from '../../protocols/http-request'
+import { Validator } from '../../protocols/validator'
 import { CreateUserController } from './create-user-controller'
 
 describe('CreateUser Controller', () => {
@@ -88,11 +89,17 @@ class CreateUserStub implements ICreateUser {
   }
 }
 
+class ValidatorStub implements Validator {
+  validate (input: any): void {
+  }
+}
+
 const makeSut = (): SutTypes => {
   const createUserStub = new CreateUserStub()
+  const validatorStub = new ValidatorStub()
 
   return {
-    sut: new CreateUserController(createUserStub),
+    sut: new CreateUserController(createUserStub, validatorStub),
     createUserStub: createUserStub
   }
 }
