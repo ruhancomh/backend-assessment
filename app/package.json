@@ -14,6 +14,8 @@
   "author": "Ruhan de Oliveira Baiense",
   "license": "ISC",
   "dependencies": {
+    "@types/dateformat": "^5.0.0",
+    "dateformat": "4.6.3",
     "express": "^4.18.1",
     "fast-glob": "^3.2.11",
     "mongoose": "^6.3.8"
