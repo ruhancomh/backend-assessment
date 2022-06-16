@@ -1,6 +1,6 @@
 import { IUserModel } from '../../../domain/models/user-model'
 import { UserNotFoundError } from '../../errors/user-not-found-error'
-import { IUserRepository } from '../../protocols/repositories/user-repository'
+import { IFindUserRepository } from '../../protocols/repositories/find-user-repository'
 import { DbGetUser } from './db-get-user'
 
 describe('DbGetUser UseCase', () => {
@@ -70,7 +70,7 @@ interface SutTypes {
   userRepositoryStub: UserRepositoryStub
 }
 
-class UserRepositoryStub implements IUserRepository {
+class UserRepositoryStub implements IFindUserRepository {
   async findById (id: string): Promise<IUserModel| null> {
     const fakeUser: IUserModel = {
       id: '123',

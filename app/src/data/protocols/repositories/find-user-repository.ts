@@ -1,5 +1,5 @@
 import { IUserModel } from '../../../domain/models/user-model'
 
-export interface IUserRepository {
+export interface IFindUserRepository {
   findById: (id: string) => Promise<IUserModel | null>
 }

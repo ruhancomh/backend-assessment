@@ -1,4 +1,4 @@
-import { IUserRepository } from '../../../../../data/protocols/repositories/user-repository'
+import { IFindUserRepository } from '../../../../../data/protocols/repositories/find-user-repository'
 import { MongoHelper } from '../../helpers/mongo-helper'
 import { UserMongoModel } from '../../models/user-model'
 import { UserMongoRepository } from './user-repository'
@@ -46,7 +46,7 @@ describe('User Mongo Repository', () => {
     expect(user).toBeNull()
   })
 
-  const makeSut = (): IUserRepository => {
+  const makeSut = (): IFindUserRepository => {
     return new UserMongoRepository()
   }
 })

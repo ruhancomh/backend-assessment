@@ -1,12 +1,12 @@
 import { IUserModel } from '../../../domain/models/user-model'
 import { IGetUser } from '../../../domain/usecases/get-user'
 import { UserNotFoundError } from '../../errors/user-not-found-error'
-import { IUserRepository } from '../../protocols/repositories/user-repository'
+import { IFindUserRepository } from '../../protocols/repositories/find-user-repository'
 
 export class DbGetUser implements IGetUser {
-  private readonly userRepository: IUserRepository
+  private readonly userRepository: IFindUserRepository
 
-  constructor (userRepository: IUserRepository) {
+  constructor (userRepository: IFindUserRepository) {
     this.userRepository = userRepository
   }
 
