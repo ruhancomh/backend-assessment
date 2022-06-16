@@ -4,7 +4,7 @@ import { IGetUser } from '../../../domain/usecases/get-user'
 import { InternalServerError } from '../../errors/internal-server-error'
 import { ResourceNotFoundError } from '../../errors/resource-not-found-error'
 import { HttpRequest } from '../../protocols/http-request'
-import { IGetUserResponse } from '../../protocols/responses/get-user-response'
+import { IUserResponse } from '../../protocols/responses/user-response'
 import { GetUserController } from './get-user-controller'
 
 describe('GetUser Controller', () => {
@@ -25,7 +25,7 @@ describe('GetUser Controller', () => {
     // Arrange
     const { sut } = makeSut()
     const fakeRequest = makeFakeRequest()
-    const expectedUser: IGetUserResponse = {
+    const expectedUser: IUserResponse = {
       id: '507f191e810c19729de860ea',
       username: 'foo_bar',
       createdAt: '2022-06-13T13:00:00.000Z'

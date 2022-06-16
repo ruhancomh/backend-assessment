@@ -16,7 +16,7 @@ describe('User Routes', () => {
     await MongoHelper.close()
   })
 
-  test('Should return 200 and an user on success', async () => {
+  test('Should return 200 and an user on getUser with success', async () => {
     // Arrange
     const userData = new UserMongoModel()
 
@@ -36,7 +36,7 @@ describe('User Routes', () => {
       })
   })
 
-  test('Should return 404 on user not found', async () => {
+  test('Should return 404 on getUser on user not found', async () => {
     // Arrange
     const userId = '507f191e810c19729de860ea'
 
@@ -54,7 +54,7 @@ describe('User Routes', () => {
       })
   })
 
-  test('Should return 500 on unknow error', async () => {
+  test('Should return 500 on getUser on unknow error', async () => {
     // Arrange
     const userId = '1'
 
@@ -69,6 +69,24 @@ describe('User Routes', () => {
           name: 'InternalServerError',
           statusCode: 500
         })
+      })
+  })
+
+  test('Should return 201 and an user on createUser with success', async () => {
+    // Arrange
+    const requestData = {
+      username: 'foo_bar'
+    }
+
+    // Act & Assert
+    await request(app)
+      .post('/api/v1/users/')
+      .send(requestData)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.id).toBeTruthy()
+        expect(res.body.username).toBe(requestData.username)
+        expect(res.body.createdAt).toBeTruthy()
       })
   })
 })

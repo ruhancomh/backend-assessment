@@ -5,7 +5,7 @@ import { responseError, responseOk } from '../../helpers/http-response-helper'
 import { BaseController } from '../../protocols/base-controller'
 import { HttpRequest } from '../../protocols/http-request'
 import { HttpResponse } from '../../protocols/http-response'
-import { IGetUserResponse } from '../../protocols/responses/get-user-response'
+import { IUserResponse } from '../../protocols/responses/user-response'
 
 export class GetUserController implements BaseController {
   private readonly getUser: IGetUser
@@ -19,7 +19,7 @@ export class GetUserController implements BaseController {
       const userId = httRequest.params.userId
       const user = await this.getUser.get(userId)
 
-      const getUserResponse: IGetUserResponse = {
+      const getUserResponse: IUserResponse = {
         id: user.id,
         username: user.username,
         createdAt: user.createdAt?.toISOString() ?? ''

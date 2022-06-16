@@ -5,6 +5,7 @@ import { responseCreated, responseError } from '../../helpers/http-response-help
 import { BaseController } from '../../protocols/base-controller'
 import { HttpRequest } from '../../protocols/http-request'
 import { HttpResponse } from '../../protocols/http-response'
+import { IUserResponse } from '../../protocols/responses/user-response'
 
 export class CreateUserController implements BaseController {
   private readonly createUser: ICreateUser
@@ -21,7 +22,13 @@ export class CreateUserController implements BaseController {
         username: username
       })
 
-      return responseCreated(userCreated)
+      const userResponse: IUserResponse = {
+        id: userCreated.id,
+        username: userCreated.username,
+        createdAt: userCreated.createdAt?.toISOString() ?? ''
+      }
+
+      return responseCreated(userResponse)
     } catch (error) {
       if (error instanceof DuplicateKeyError) {
         return responseError(new BadRequestError(error.message))
