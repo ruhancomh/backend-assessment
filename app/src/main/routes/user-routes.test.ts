@@ -76,7 +76,7 @@ describe('User Routes', () => {
   test('Should return 201 and an user on createUser with success', async () => {
     // Arrange
     const requestData = {
-      username: 'foo_bar'
+      username: 'foobbar'
     }
 
     // Act & Assert
@@ -112,11 +112,11 @@ describe('User Routes', () => {
   test('Should return 400 on createUser with duplicated username', async () => {
     // Arrange
     const userData = new UserMongoModel()
-    userData.username = 'foo_bar'
+    userData.username = 'foobbar'
     await userData.save()
 
     const requestData = {
-      username: 'foo_bar'
+      username: 'foobbar'
     }
 
     // Act & Assert
@@ -134,7 +134,7 @@ describe('User Routes', () => {
   test('Should return 400 on createUser if username exceed the maximum size', async () => {
     // Arrange
     const requestData = {
-      username: 'foo_bar_foo_bar_foo_bar'
+      username: 'foobbarffooobarrfoobbar'
     }
 
     // Act & Assert
@@ -146,6 +146,26 @@ describe('User Routes', () => {
         expect(res.body).toEqual({
           message: 'Param <username> exceeded the maximum size of <14>',
           name: 'MaximumParamSizeError',
+          statusCode: 400
+        })
+      })
+  })
+
+  test('Should return 400 on createUser if username have not alphanumeric value', async () => {
+    // Arrange
+    const requestData = {
+      username: 'foo_bar'
+    }
+
+    // Act & Assert
+    await request(app)
+      .post('/api/v1/users/')
+      .send(requestData)
+      .expect(400)
+      .expect((res) => {
+        expect(res.body).toEqual({
+          message: 'Param <username> only accepts alphanumeric values',
+          name: 'RequiredAlphanumericParamError',
           statusCode: 400
         })
       })

@@ -1,5 +1,6 @@
 import { MaximumParamSizeError } from '../../errors/maximum-param-size-error'
 import { MissingParamError } from '../../errors/missing-param-error'
+import { RequiredAlphanumericParamError } from '../../errors/required-alphanumeric-param-error'
 import { HttpRequest } from '../../protocols/http-request'
 import { CreateUserValidatorComposite } from './create-user-validator-composite'
 
@@ -22,7 +23,7 @@ describe('CreateUser Validator Composite', () => {
     const { sut } = makeSut()
     const input: HttpRequest = {
       body: {
-        username: 'any_username'
+        username: 'anyUsername'
       }
     }
 
@@ -37,7 +38,7 @@ describe('CreateUser Validator Composite', () => {
     const { sut } = makeSut()
     const input: HttpRequest = {
       body: {
-        username: 'foo_bar_foo_bar_foo_bar'
+        username: 'foobbarrfooobarrfoobbar'
       }
     }
 
@@ -52,7 +53,7 @@ describe('CreateUser Validator Composite', () => {
     const { sut } = makeSut()
     const input: HttpRequest = {
       body: {
-        username: 'foo_barfoo_bar'
+        username: 'fooobarfoobbar'
       }
     }
 
@@ -60,6 +61,21 @@ describe('CreateUser Validator Composite', () => {
     expect(() => {
       sut.validate(input)
     }).not.toThrow()
+  })
+
+  test('Should throws RequiredAlphanumericParamError if username have not alphanumeric value', async () => {
+    // Arrange
+    const { sut } = makeSut()
+    const input: HttpRequest = {
+      body: {
+        username: 'f0o-o?'
+      }
+    }
+
+    // Act & Assert
+    expect(() => {
+      sut.validate(input)
+    }).toThrowError(new RequiredAlphanumericParamError('username'))
   })
 })
 
