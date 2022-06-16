@@ -1,4 +1,5 @@
-import { IFindUserRepository } from '../../../../../data/protocols/repositories/find-user-repository'
+import { CreateUserModel } from '../../../../../domain/protocols/create-user-model'
+import { DuplicateKeyError } from '../../../../errors/duplicate-key-error'
 import { MongoHelper } from '../../helpers/mongo-helper'
 import { UserMongoModel } from '../../models/user-model'
 import { UserMongoRepository } from './user-repository'
@@ -46,7 +47,40 @@ describe('User Mongo Repository', () => {
     expect(user).toBeNull()
   })
 
-  const makeSut = (): IFindUserRepository => {
+  test('Should return an user on create with success', async () => {
+    // Arrange
+    const sut = makeSut()
+    const userData: CreateUserModel = {
+      username: 'foo_bar'
+    }
+
+    // Act
+    const user = await sut.create(userData)
+
+    // Assert
+    expect(user).toBeTruthy()
+    expect(user.id).toBeTruthy()
+    expect(user.username).toBe('foo_bar')
+    expect(user.createdAt).toBeTruthy()
+  })
+
+  test('Should throw DuplicateKeyError on duplicate key', async () => {
+    // Arrange
+    const sut = makeSut()
+    const userData: CreateUserModel = {
+      username: 'foo_bar'
+    }
+
+    await sut.create(userData)
+
+    // Act
+    const result = sut.create(userData)
+
+    // Assert
+    await expect(result).rejects.toThrow(DuplicateKeyError)
+  })
+
+  const makeSut = (): UserMongoRepository => {
     return new UserMongoRepository()
   }
 })
