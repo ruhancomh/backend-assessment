@@ -22,8 +22,6 @@ describe('User Mongo Repository', () => {
     const userData = new UserMongoModel()
 
     userData.username = 'foo_bar'
-    const createdAt = new Date()
-    userData.createdAt = createdAt
 
     await userData.save()
 
@@ -34,7 +32,7 @@ describe('User Mongo Repository', () => {
     expect(user).toBeTruthy()
     expect(user?.id).toBe(userData.id)
     expect(user?.username).toBe('foo_bar')
-    expect(user?.createdAt?.getTime()).toBe(createdAt.getTime())
+    expect(user?.createdAt).toBeTruthy()
   })
 
   test('Should return null on findUserById if no record found', async () => {

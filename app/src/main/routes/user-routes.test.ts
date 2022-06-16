@@ -21,8 +21,6 @@ describe('User Routes', () => {
     const userData = new UserMongoModel()
 
     userData.username = 'foo_bar'
-    const createdAt = new Date()
-    userData.createdAt = createdAt
 
     await userData.save()
 
@@ -32,11 +30,9 @@ describe('User Routes', () => {
       .send()
       .expect(200)
       .expect((res) => {
-        expect(res.body).toEqual({
-          id: userData.id,
-          username: userData.username,
-          createdAt: userData.createdAt?.toISOString()
-        })
+        expect(res.body.id).toBe(userData.id)
+        expect(res.body.username).toBe(userData.username)
+        expect(res.body.createdAt).toBeTruthy()
       })
   })
 
