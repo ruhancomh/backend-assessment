@@ -1,7 +1,7 @@
 import { IUserModel } from '../../../domain/models/user-model'
 import { CreateUserModel } from '../../../domain/protocols/create-user-model'
-import { ICreateUser } from '../../../domain/usecases/create-user'
-import { ICreateUserRepository } from '../../protocols/repositories/create-user-repository'
+import { ICreateUser } from '../../../domain/usecases/user/create-user'
+import { ICreateUserRepository } from '../../protocols/repositories/user/create-user-repository'
 
 export class DbCreateUser implements ICreateUser {
   private readonly userRepository: ICreateUserRepository

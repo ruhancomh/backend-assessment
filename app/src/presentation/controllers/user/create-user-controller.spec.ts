@@ -1,6 +1,6 @@
 import { IUserModel } from '../../../domain/models/user-model'
 import { CreateUserModel } from '../../../domain/protocols/create-user-model'
-import { ICreateUser } from '../../../domain/usecases/create-user'
+import { ICreateUser } from '../../../domain/usecases/user/create-user'
 import { DuplicateKeyError } from '../../../infra/errors/duplicate-key-error'
 import { BadRequestError } from '../../errors/bad-request-error'
 import { InternalServerError } from '../../errors/internal-server-error'

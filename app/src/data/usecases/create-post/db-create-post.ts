@@ -1,7 +1,7 @@
 import { PostTypes } from '../../../domain/enums/post-types'
 import { IPostModel } from '../../../domain/models/post-model'
 import { CreatePostModel } from '../../../domain/protocols/create-post-model'
-import { ICreatePost } from '../../../domain/usecases/create-post'
+import { ICreatePost } from '../../../domain/usecases/post/create-post'
 import { DbCreatePostModel } from '../../protocols/dtos/db-create-post-model'
 import { ICreatePostRepository } from '../../protocols/repositories/post/create-post-repository'
 

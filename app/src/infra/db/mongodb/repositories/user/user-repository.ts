@@ -1,5 +1,5 @@
-import { ICreateUserRepository } from '../../../../../data/protocols/repositories/create-user-repository'
-import { IFindUserRepository } from '../../../../../data/protocols/repositories/find-user-repository'
+import { ICreateUserRepository } from '../../../../../data/protocols/repositories/user/create-user-repository'
+import { IFindUserRepository } from '../../../../../data/protocols/repositories/user/find-user-repository'
 import { IUserModel } from '../../../../../domain/models/user-model'
 import { CreateUserModel } from '../../../../../domain/protocols/create-user-model'
 import { DuplicateKeyError } from '../../../../errors/duplicate-key-error'

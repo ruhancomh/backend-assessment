@@ -1,7 +1,7 @@
 import { IUserModel } from '../../../domain/models/user-model'
-import { IGetUser } from '../../../domain/usecases/get-user'
+import { IGetUser } from '../../../domain/usecases/user/get-user'
 import { UserNotFoundError } from '../../errors/user-not-found-error'
-import { IFindUserRepository } from '../../protocols/repositories/find-user-repository'
+import { IFindUserRepository } from '../../protocols/repositories/user/find-user-repository'
 
 export class DbGetUser implements IGetUser {
   private readonly userRepository: IFindUserRepository

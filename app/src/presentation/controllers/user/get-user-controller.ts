@@ -1,6 +1,6 @@
 import dateFormat from 'dateformat'
 import { UserNotFoundError } from '../../../data/errors/user-not-found-error'
-import { IGetUser } from '../../../domain/usecases/get-user'
+import { IGetUser } from '../../../domain/usecases/user/get-user'
 import { ResourceNotFoundError } from '../../errors/resource-not-found-error'
 import { responseError, responseOk } from '../../helpers/http-response-helper'
 import { BaseController } from '../../protocols/base-controller'

@@ -1,6 +1,6 @@
 import { UserNotFoundError } from '../../../data/errors/user-not-found-error'
 import { IUserModel } from '../../../domain/models/user-model'
-import { IGetUser } from '../../../domain/usecases/get-user'
+import { IGetUser } from '../../../domain/usecases/user/get-user'
 import { InternalServerError } from '../../errors/internal-server-error'
 import { ResourceNotFoundError } from '../../errors/resource-not-found-error'
 import { HttpRequest } from '../../protocols/http-request'
