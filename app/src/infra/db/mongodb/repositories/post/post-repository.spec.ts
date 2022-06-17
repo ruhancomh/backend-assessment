@@ -81,6 +81,68 @@ describe('Post Mongo Repository', () => {
     // Assert
     expect(count).toBe(2)
   })
+
+  test('Should return zero on countByAuthorInDateRange if no documents found', async () => {
+    // Arrange
+    const sut = makeSut()
+
+    const userData = new UserMongoModel()
+    userData.username = 'fooBar'
+    await userData.save()
+
+    const postData: DbCreatePostModel = {
+      message: 'foo_bar',
+      authorId: userData.id,
+      type: PostTypes.ORIGINAL
+    }
+
+    await sut.create(postData)
+    await sut.create(postData)
+
+    const startDate = new Date()
+    startDate.setHours(0, 0, 0)
+    startDate.setFullYear(1990)
+
+    const endDate = new Date()
+    endDate.setHours(23, 59, 59)
+    endDate.setFullYear(1990)
+
+    // Act
+    const count = await sut.countByAuthorInDateRange(userData.id, startDate, endDate)
+
+    // Assert
+    expect(count).toBe(0)
+  })
+
+  test('Should return 2 on countByAuthorInDateRange', async () => {
+    // Arrange
+    const sut = makeSut()
+
+    const userData = new UserMongoModel()
+    userData.username = 'fooBar'
+    await userData.save()
+
+    const postData: DbCreatePostModel = {
+      message: 'foo_bar',
+      authorId: userData.id,
+      type: PostTypes.ORIGINAL
+    }
+
+    await sut.create(postData)
+    await sut.create(postData)
+
+    const startDate = new Date()
+    startDate.setHours(0, 0, 0)
+
+    const endDate = new Date()
+    endDate.setHours(23, 59, 59)
+
+    // Act
+    const count = await sut.countByAuthorInDateRange(userData.id, startDate, endDate)
+
+    // Assert
+    expect(count).toBe(2)
+  })
 })
 
 const makeSut = (): PostMongoRepository => {

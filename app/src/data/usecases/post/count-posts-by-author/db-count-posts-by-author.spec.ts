@@ -21,13 +21,13 @@ describe('DbCountPostsByAuthor UseCase', () => {
     // Arrange
     const { sut, postRepositoryStub } = makeSut()
     const authorId = '123'
-    const findByIdSpy = jest.spyOn(postRepositoryStub, 'countByAuthor')
+    const countByAuthorSpy = jest.spyOn(postRepositoryStub, 'countByAuthor')
 
     // Act
     await sut.count(authorId)
 
     // Assert
-    expect(findByIdSpy).toHaveBeenCalledWith(authorId)
+    expect(countByAuthorSpy).toHaveBeenCalledWith(authorId)
   })
 
   test('Should return the posts count on success', async () => {

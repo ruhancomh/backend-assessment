@@ -2,7 +2,9 @@ import { PostTypes } from '../../../../domain/enums/post-types'
 import { IPostModel } from '../../../../domain/models/post-model'
 import { IUserModel } from '../../../../domain/models/user-model'
 import { CreatePostModel } from '../../../../domain/protocols/create-post-model'
+import { IValidateMaxPostsDayByAuthor } from '../../../../domain/usecases/post/validate-max-posts-day-by-author'
 import { IGetUser } from '../../../../domain/usecases/user/get-user'
+import { MaxPostsPerDayExceededError } from '../../../errors/max-posts-per-day-exceeded-error'
 import { DbCreatePostModel } from '../../../protocols/dtos/db-create-post-model'
 import { ICreatePostRepository } from '../../../protocols/repositories/post/create-post-repository'
 import { DbCreatePost } from './db-create-post'
@@ -26,6 +28,24 @@ describe('DbCreatePost UseCase', () => {
     await expect(result).rejects.toThrow()
   })
 
+  test('Should throw if IValidateMaxPostsDayByAuthor throws', async () => {
+    // Arrange
+    const { sut, validateMaxPostsDayByAuthorStub } = makeSut()
+    const postData: CreatePostModel = {
+      message: 'foo_bar',
+      authorId: '123'
+    }
+
+    jest.spyOn(validateMaxPostsDayByAuthorStub, 'pass')
+      .mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+
+    // Act
+    const result = sut.create(postData)
+
+    // Assert
+    await expect(result).rejects.toThrow()
+  })
+
   test('Should call PostRepository with correct values', async () => {
     // Arrange
     const { sut, postRepositoryStub } = makeSut()
@@ -33,17 +53,51 @@ describe('DbCreatePost UseCase', () => {
       message: 'foo_bar',
       authorId: '123'
     }
-    const findByIdSpy = jest.spyOn(postRepositoryStub, 'create')
+    const createSpy = jest.spyOn(postRepositoryStub, 'create')
 
     // Act
     await sut.create(postData)
 
     // Assert
-    expect(findByIdSpy).toHaveBeenCalledWith({
+    expect(createSpy).toHaveBeenCalledWith({
       message: postData.message,
       type: PostTypes.ORIGINAL,
       authorId: postData.authorId
     })
+  })
+
+  test('Should call validateMaxPostsDayByAuthor with correct values', async () => {
+    // Arrange
+    const { sut, validateMaxPostsDayByAuthorStub } = makeSut()
+    const postData: CreatePostModel = {
+      message: 'foo_bar',
+      authorId: '123'
+    }
+    const passSpy = jest.spyOn(validateMaxPostsDayByAuthorStub, 'pass')
+
+    // Act
+    await sut.create(postData)
+
+    // Assert
+    expect(passSpy).toHaveBeenCalledWith(postData.authorId)
+  })
+
+  test('Should throw MaxPostsPerDayExceededError if user exceed max number of posts per day', async () => {
+    // Arrange
+    const { sut, validateMaxPostsDayByAuthorStub } = makeSut()
+    const postData: CreatePostModel = {
+      message: 'foo_bar',
+      authorId: '123'
+    }
+
+    jest.spyOn(validateMaxPostsDayByAuthorStub, 'pass')
+      .mockReturnValueOnce(new Promise((resolve, reject) => resolve(false)))
+
+    // Act
+    const result = sut.create(postData)
+
+    // Assert
+    await expect(result).rejects.toThrow(MaxPostsPerDayExceededError)
   })
 
   test('Should return an post on success', async () => {
@@ -73,8 +127,18 @@ interface SutTypes {
   sut: DbCreatePost
   postRepositoryStub: PostRepositoryStub
   getUserStub: GetUserStub
+  validateMaxPostsDayByAuthorStub: ValidateMaxPostsDayByAuthorStub
 }
 
+class ValidateMaxPostsDayByAuthorStub implements IValidateMaxPostsDayByAuthor {
+  async pass (authorId: string): Promise<boolean> {
+    return true
+  }
+
+  getMaxPostsPerDay (): number {
+    return 5
+  }
+}
 class GetUserStub implements IGetUser {
   async get (id: string): Promise<IUserModel> {
     const fakeUser: IUserModel = {
@@ -102,11 +166,13 @@ class PostRepositoryStub implements ICreatePostRepository {
 const makeSut = (): SutTypes => {
   const postRepositoryStub = new PostRepositoryStub()
   const getUserStub = new GetUserStub()
-  const sut = new DbCreatePost(postRepositoryStub, getUserStub)
+  const validateMaxPostsDayByAuthorStub = new ValidateMaxPostsDayByAuthorStub()
+  const sut = new DbCreatePost(postRepositoryStub, getUserStub, validateMaxPostsDayByAuthorStub)
 
   return {
     sut: sut,
     postRepositoryStub: postRepositoryStub,
-    getUserStub: getUserStub
+    getUserStub: getUserStub,
+    validateMaxPostsDayByAuthorStub: validateMaxPostsDayByAuthorStub
   }
 }

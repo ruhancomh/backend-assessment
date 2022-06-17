@@ -1,6 +1,8 @@
+import { MaxPostsPerDayExceededError } from '../../../data/errors/max-posts-per-day-exceeded-error'
 import { UserNotFoundError } from '../../../data/errors/user-not-found-error'
 import { CreatePostModel } from '../../../domain/protocols/create-post-model'
 import { ICreatePost } from '../../../domain/usecases/post/create-post'
+import { BadRequestError } from '../../errors/bad-request-error'
 import { ResourceNotFoundError } from '../../errors/resource-not-found-error'
 import { responseCreated, responseError } from '../../helpers/http-response-helper'
 import { BaseController } from '../../protocols/base-controller'
@@ -41,6 +43,10 @@ export class CreatePostController implements BaseController {
     } catch (error) {
       if (error instanceof UserNotFoundError) {
         return responseError(new ResourceNotFoundError(error.message))
+      }
+
+      if (error instanceof MaxPostsPerDayExceededError) {
+        return responseError(new BadRequestError(error.message))
       }
 
       return responseError(error)

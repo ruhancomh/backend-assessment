@@ -1,3 +1,4 @@
+import { MaxPostsPerDayExceededError } from '../../../data/errors/max-posts-per-day-exceeded-error'
 import { UserNotFoundError } from '../../../data/errors/user-not-found-error'
 import { PostTypes } from '../../../domain/enums/post-types'
 import { IPostModel } from '../../../domain/models/post-model'
@@ -86,6 +87,23 @@ describe('CreatePost Controller', () => {
     // Assert
     expect(httpResponse.statusCode).toBe(404)
     expect(httpResponse.body).toEqual(new ResourceNotFoundError('User not found for id: 123'))
+  })
+
+  test('Should return 400 if user exceed max number of posts per day', async () => {
+    // Arrange
+    const { sut, createPostStub } = makeSut()
+    const fakeRequest = makeFakeRequest()
+
+    jest.spyOn(createPostStub, 'create').mockImplementationOnce(() => {
+      throw new MaxPostsPerDayExceededError('123', 5)
+    })
+
+    // Act
+    const httpResponse = await sut.handle(fakeRequest)
+
+    // Assert
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new ResourceNotFoundError('User <123> exceeded the max number of posts per day of <5>'))
   })
 })
 
