@@ -4,9 +4,23 @@ import { CreatePostModel } from '../../../domain/protocols/create-post-model'
 import { ICreatePost } from '../../../domain/usecases/post/create-post'
 import { InternalServerError } from '../../errors/internal-server-error'
 import { HttpRequest } from '../../protocols/http-request'
+import { Validator } from '../../protocols/validator'
 import { CreatePostController } from './create-post-controller'
 
 describe('CreatePost Controller', () => {
+  test('Should call validator with correct value', async () => {
+    // Arrange
+    const { sut, validatorStub } = makeSut()
+    const validateSpy = jest.spyOn(validatorStub, 'validate')
+    const fakeRequest = makeFakeRequest()
+
+    // Act
+    await sut.handle(fakeRequest)
+
+    // Assert
+    expect(validateSpy).toBeCalledWith(fakeRequest)
+  })
+
   test('Should call createUser with correct value', async () => {
     // Arrange
     const { sut, createPostStub } = makeSut()
@@ -58,6 +72,7 @@ describe('CreatePost Controller', () => {
 interface SutTypes {
   sut: CreatePostController
   createPostStub: ICreatePost
+  validatorStub: Validator
 }
 
 class CreatePostStub implements ICreatePost {
@@ -71,12 +86,19 @@ class CreatePostStub implements ICreatePost {
   }
 }
 
+class ValidatorStub implements Validator {
+  validate (input: any): void {
+  }
+}
+
 const makeSut = (): SutTypes => {
   const createPostStub = new CreatePostStub()
+  const validatorStub = new ValidatorStub()
 
   return {
-    sut: new CreatePostController(createPostStub),
-    createPostStub: createPostStub
+    sut: new CreatePostController(createPostStub, validatorStub),
+    createPostStub: createPostStub,
+    validatorStub: validatorStub
   }
 }
 

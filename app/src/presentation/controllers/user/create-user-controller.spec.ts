@@ -9,6 +9,19 @@ import { Validator } from '../../protocols/validator'
 import { CreateUserController } from './create-user-controller'
 
 describe('CreateUser Controller', () => {
+  test('Should call validator with correct value', async () => {
+    // Arrange
+    const { sut, validatorStub } = makeSut()
+    const validateSpy = jest.spyOn(validatorStub, 'validate')
+    const fakeRequest = makeFakeRequest()
+
+    // Act
+    await sut.handle(fakeRequest)
+
+    // Assert
+    expect(validateSpy).toBeCalledWith(fakeRequest)
+  })
+
   test('Should call createUser with correct value', async () => {
     // Arrange
     const { sut, createUserStub } = makeSut()
@@ -77,6 +90,7 @@ describe('CreateUser Controller', () => {
 interface SutTypes {
   sut: CreateUserController
   createUserStub: ICreateUser
+  validatorStub: Validator
 }
 
 class CreateUserStub implements ICreateUser {
@@ -100,7 +114,8 @@ const makeSut = (): SutTypes => {
 
   return {
     sut: new CreateUserController(createUserStub, validatorStub),
-    createUserStub: createUserStub
+    createUserStub: createUserStub,
+    validatorStub: validatorStub
   }
 }
 

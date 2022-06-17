@@ -5,16 +5,21 @@ import { BaseController } from '../../protocols/base-controller'
 import { HttpRequest } from '../../protocols/http-request'
 import { HttpResponse } from '../../protocols/http-response'
 import { IPostResponse } from '../../protocols/responses/post-response'
+import { Validator } from '../../protocols/validator'
 
 export class CreatePostController implements BaseController {
   private readonly createPost: ICreatePost
+  private readonly validator: Validator
 
-  constructor (createPost: ICreatePost) {
+  constructor (createPost: ICreatePost, validator: Validator) {
     this.createPost = createPost
+    this.validator = validator
   }
 
   async handle (httRequest: HttpRequest): Promise<HttpResponse> {
     try {
+      this.validator.validate(httRequest)
+
       const createPostData: CreatePostModel = {
         message: httRequest.body.message
       }
