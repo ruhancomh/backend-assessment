@@ -4,6 +4,7 @@ import { responseCreated, responseError } from '../../helpers/http-response-help
 import { BaseController } from '../../protocols/base-controller'
 import { HttpRequest } from '../../protocols/http-request'
 import { HttpResponse } from '../../protocols/http-response'
+import { IPostResponse } from '../../protocols/responses/post-response'
 
 export class CreatePostController implements BaseController {
   private readonly createPost: ICreatePost
@@ -20,7 +21,14 @@ export class CreatePostController implements BaseController {
 
       const postCreated = await this.createPost.create(createPostData)
 
-      return responseCreated(postCreated)
+      const createPostResponse: IPostResponse = {
+        id: postCreated.id,
+        type: postCreated.type,
+        message: postCreated.message,
+        createdAt: postCreated.createdAt?.toISOString() ?? ''
+      }
+
+      return responseCreated(createPostResponse)
     } catch (error) {
       return responseError(error)
     }
