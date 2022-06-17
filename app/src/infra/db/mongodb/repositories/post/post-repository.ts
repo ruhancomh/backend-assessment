@@ -9,6 +9,7 @@ export class PostMongoRepository implements ICreatePostRepository {
 
     postModel.message = postData.message
     postModel.type = postData.type
+    postModel.author = postData.authorId
 
     return await postModel.save()
   }

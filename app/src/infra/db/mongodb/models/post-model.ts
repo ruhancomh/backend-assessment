@@ -13,6 +13,11 @@ const postSchema = new Schema({
     enum: Object.values(PostTypes),
     default: PostTypes.ORIGINAL,
     required: true
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 },
 {

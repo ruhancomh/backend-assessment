@@ -79,6 +79,7 @@ class CreatePostStub implements ICreatePost {
   async create (createPostData: CreatePostModel): Promise<IPostModel> {
     return await Promise.resolve({
       id: '123',
+      author: createPostData.authorId,
       message: createPostData.message,
       type: PostTypes.ORIGINAL,
       createdAt: new Date('2022-06-13T10:00:00')

@@ -21,7 +21,8 @@ export class CreatePostController implements BaseController {
       this.validator.validate(httRequest)
 
       const createPostData: CreatePostModel = {
-        message: httRequest.body.message
+        message: httRequest.body.message,
+        authorId: httRequest.body.authorId
       }
 
       const postCreated = await this.createPost.create(createPostData)
@@ -30,6 +31,7 @@ export class CreatePostController implements BaseController {
         id: postCreated.id,
         type: postCreated.type,
         message: postCreated.message,
+        author: postCreated.author,
         createdAt: postCreated.createdAt?.toISOString() ?? ''
       }
 
