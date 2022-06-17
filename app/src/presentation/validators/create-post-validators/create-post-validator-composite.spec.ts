@@ -17,12 +17,28 @@ describe('CreatePost Validator Composite', () => {
     }).toThrowError(new MissingParamError('message'))
   })
 
+  test('Should throws MissingParramError if no authorId is provided', async () => {
+    // Arrange
+    const { sut } = makeSut()
+    const input: HttpRequest = {
+      body: {
+        message: 'fooBar'
+      }
+    }
+
+    // Act & Assert
+    expect(() => {
+      sut.validate(input)
+    }).toThrowError(new MissingParamError('authorId'))
+  })
+
   test('Should pass if valid input is provided', async () => {
     // Arrange
     const { sut } = makeSut()
     const input: HttpRequest = {
       body: {
-        message: 'foo_bar'
+        message: 'foo_bar',
+        authorId: '123'
       }
     }
 
@@ -49,7 +65,8 @@ describe('CreatePost Validator Composite', () => {
 
     const input: HttpRequest = {
       body: {
-        message: message
+        message: message,
+        authorId: '123'
       }
     }
 
@@ -67,7 +84,8 @@ describe('CreatePost Validator Composite', () => {
 
     const input: HttpRequest = {
       body: {
-        message: message
+        message: message,
+        authorId: '123'
       }
     }
 

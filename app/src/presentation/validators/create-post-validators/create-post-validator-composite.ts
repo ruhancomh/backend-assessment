@@ -7,7 +7,7 @@ export class CreatePostValidatorComposite extends ValidatorComposite {
     ['message', 777]
   ])
 
-  private static readonly REQUIRED_FIELDS: string[] = ['message']
+  private static readonly REQUIRED_FIELDS: string[] = ['message', 'authorId']
 
   constructor () {
     super([
