@@ -1,7 +1,8 @@
 import { PostTypes } from '../../../domain/enums/post-types'
 
 export interface DbCreatePostModel {
-  message: string
+  message?: string
   type: PostTypes
   authorId: string
+  originalPostId?: string
 }

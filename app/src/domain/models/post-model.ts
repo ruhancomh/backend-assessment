@@ -6,5 +6,5 @@ export interface IPostModel {
   type: PostTypes
   message?: string
   createdAt?: Date
-  originalPost?: IPostModel
+  originalPost?: any
 }

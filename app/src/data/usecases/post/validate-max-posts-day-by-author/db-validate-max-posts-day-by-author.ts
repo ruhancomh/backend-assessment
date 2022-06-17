@@ -12,10 +12,10 @@ export class DbValidateMaxPostsDayByAuthor implements IValidateMaxPostsDayByAuth
 
   async pass (authorId: string): Promise<boolean> {
     const startDate = new Date()
-    startDate.setHours(0, 0, 0)
+    startDate.setHours(0, 0, 0, 0)
 
     const endDate = new Date()
-    endDate.setHours(23, 59, 59)
+    endDate.setHours(23, 59, 59, 999)
 
     const countPosts = await this.postsRepository.countByAuthorInDateRange(authorId, startDate, endDate)
 

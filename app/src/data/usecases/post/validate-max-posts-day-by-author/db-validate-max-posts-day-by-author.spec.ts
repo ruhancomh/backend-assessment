@@ -23,10 +23,10 @@ describe('DbValidateMaxPostsDayByAuthor UseCase', () => {
     const authorId = '123'
 
     const startDate = new Date()
-    startDate.setHours(0, 0, 0)
+    startDate.setHours(0, 0, 0, 0)
 
     const endDate = new Date()
-    endDate.setHours(23, 59, 59)
+    endDate.setHours(23, 59, 59, 999)
 
     const countByAuthorInDateRangeSpy = jest.spyOn(postRepositoryStub, 'countByAuthorInDateRange')
 
