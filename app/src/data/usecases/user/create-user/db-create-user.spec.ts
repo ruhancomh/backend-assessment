@@ -1,6 +1,6 @@
-import { IUserModel } from '../../../domain/models/user-model'
-import { CreateUserModel } from '../../../domain/protocols/create-user-model'
-import { ICreateUserRepository } from '../../protocols/repositories/user/create-user-repository'
+import { IUserModel } from '../../../../domain/models/user-model'
+import { CreateUserModel } from '../../../../domain/protocols/create-user-model'
+import { ICreateUserRepository } from '../../../protocols/repositories/user/create-user-repository'
 import { DbCreateUser } from './db-create-user'
 
 describe('DbCreateUser UseCase', () => {

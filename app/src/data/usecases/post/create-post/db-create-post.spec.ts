@@ -1,10 +1,10 @@
-import { PostTypes } from '../../../domain/enums/post-types'
-import { IPostModel } from '../../../domain/models/post-model'
-import { IUserModel } from '../../../domain/models/user-model'
-import { CreatePostModel } from '../../../domain/protocols/create-post-model'
-import { IGetUser } from '../../../domain/usecases/user/get-user'
-import { DbCreatePostModel } from '../../protocols/dtos/db-create-post-model'
-import { ICreatePostRepository } from '../../protocols/repositories/post/create-post-repository'
+import { PostTypes } from '../../../../domain/enums/post-types'
+import { IPostModel } from '../../../../domain/models/post-model'
+import { IUserModel } from '../../../../domain/models/user-model'
+import { CreatePostModel } from '../../../../domain/protocols/create-post-model'
+import { IGetUser } from '../../../../domain/usecases/user/get-user'
+import { DbCreatePostModel } from '../../../protocols/dtos/db-create-post-model'
+import { ICreatePostRepository } from '../../../protocols/repositories/post/create-post-repository'
 import { DbCreatePost } from './db-create-post'
 
 describe('DbCreatePost UseCase', () => {

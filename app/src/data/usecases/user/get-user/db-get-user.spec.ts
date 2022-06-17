@@ -1,6 +1,6 @@
-import { IUserModel } from '../../../domain/models/user-model'
-import { UserNotFoundError } from '../../errors/user-not-found-error'
-import { IFindUserRepository } from '../../protocols/repositories/user/find-user-repository'
+import { IUserModel } from '../../../../domain/models/user-model'
+import { UserNotFoundError } from '../../../errors/user-not-found-error'
+import { IFindUserRepository } from '../../../protocols/repositories/user/find-user-repository'
 import { DbGetUser } from './db-get-user'
 
 describe('DbGetUser UseCase', () => {

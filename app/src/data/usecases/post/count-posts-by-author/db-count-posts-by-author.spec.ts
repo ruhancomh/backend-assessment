@@ -1,4 +1,4 @@
-import { ICountPostsByAuthorRepository } from '../../protocols/repositories/post/count-posts-by-author-repository'
+import { ICountPostsByAuthorRepository } from '../../../protocols/repositories/post/count-posts-by-author-repository'
 import { DbCountPostsByAuthor } from './db-count-posts-by-author'
 
 describe('DbCountPostsByAuthor UseCase', () => {

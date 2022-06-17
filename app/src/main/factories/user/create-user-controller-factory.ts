@@ -1,4 +1,4 @@
-import { DbCreateUser } from '../../../data/usecases/create-user/db-create-user'
+import { DbCreateUser } from '../../../data/usecases/user/create-user/db-create-user'
 import { UserMongoRepository } from '../../../infra/db/mongodb/repositories/user/user-repository'
 import { CreateUserController } from '../../../presentation/controllers/user/create-user-controller'
 import { CreateUserValidatorComposite } from '../../../presentation/validators/create-user-validators/create-user-validator-composite'
