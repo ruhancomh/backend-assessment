@@ -1,6 +1,7 @@
 import { DbCreatePostModel } from '../../../../../data/protocols/dtos/db-create-post-model'
 import { PostTypes } from '../../../../../domain/enums/post-types'
 import { MongoHelper } from '../../helpers/mongo-helper'
+import { PostMongoModel } from '../../models/post-model'
 import { UserMongoModel } from '../../models/user-model'
 import { PostMongoRepository } from './post-repository'
 
@@ -142,6 +143,42 @@ describe('Post Mongo Repository', () => {
 
     // Assert
     expect(count).toBe(2)
+  })
+
+  test('Should return an post on findById with success', async () => {
+    // Arrange
+    const sut = makeSut()
+    const userData = new UserMongoModel()
+    userData.username = 'fooBar'
+    await userData.save()
+
+    const postData = new PostMongoModel()
+    postData.message = 'foo_bar'
+    postData.author = userData.id
+    postData.type = PostTypes.ORIGINAL
+
+    await postData.save()
+
+    // Act
+    const post = await sut.findById(postData.id)
+
+    // Assert
+    expect(post).toBeTruthy()
+    expect(post?.id).toBe(postData.id)
+    expect(post?.message).toBe('foo_bar')
+    expect(post?.type).toBe(PostTypes.ORIGINAL)
+    expect(post?.createdAt).toBeTruthy()
+  })
+
+  test('Should return null on findById if no record found', async () => {
+    // Arrange
+    const sut = makeSut()
+    const postId = '507f1f77bcf86cd799439011'
+    // Act
+    const post = await sut.findById(postId)
+
+    // Assert
+    expect(post).toBe(null)
   })
 })
 
