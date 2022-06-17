@@ -12,14 +12,14 @@ describe('CreateUser Controller', () => {
   test('Should call createUser with correct value', async () => {
     // Arrange
     const { sut, createUserStub } = makeSut()
-    const getSpy = jest.spyOn(createUserStub, 'create')
+    const createSpy = jest.spyOn(createUserStub, 'create')
     const fakeRequest = makeFakeRequest()
 
     // Act
     await sut.handle(fakeRequest)
 
     // Assert
-    expect(getSpy).toBeCalledWith({ username: 'foo_bar' })
+    expect(createSpy).toBeCalledWith({ username: 'foo_bar' })
   })
 
   test('Should return an user and 201 on success', async () => {
