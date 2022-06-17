@@ -1,8 +1,10 @@
+import { UserNotFoundError } from '../../../data/errors/user-not-found-error'
 import { PostTypes } from '../../../domain/enums/post-types'
 import { IPostModel } from '../../../domain/models/post-model'
 import { CreatePostModel } from '../../../domain/protocols/create-post-model'
 import { ICreatePost } from '../../../domain/usecases/post/create-post'
 import { InternalServerError } from '../../errors/internal-server-error'
+import { ResourceNotFoundError } from '../../errors/resource-not-found-error'
 import { HttpRequest } from '../../protocols/http-request'
 import { Validator } from '../../protocols/validator'
 import { CreatePostController } from './create-post-controller'
@@ -21,7 +23,7 @@ describe('CreatePost Controller', () => {
     expect(validateSpy).toBeCalledWith(fakeRequest)
   })
 
-  test('Should call createUser with correct value', async () => {
+  test('Should call createPost with correct value', async () => {
     // Arrange
     const { sut, createPostStub } = makeSut()
     const createSpy = jest.spyOn(createPostStub, 'create')
@@ -31,7 +33,7 @@ describe('CreatePost Controller', () => {
     await sut.handle(fakeRequest)
 
     // Assert
-    expect(createSpy).toBeCalledWith({ message: 'foo_bar' })
+    expect(createSpy).toBeCalledWith({ message: 'foo_bar', authorId: '123' })
   })
 
   test('Should return a post and 201 on success', async () => {
@@ -47,6 +49,7 @@ describe('CreatePost Controller', () => {
     expect(httpResponse.body.id).toBeTruthy()
     expect(httpResponse.body.createdAt).toBeTruthy()
     expect(httpResponse.body.message).toBe('foo_bar')
+    expect(httpResponse.body.author).toBe('123')
     expect(httpResponse.body.type).toBe(PostTypes.ORIGINAL)
   })
 
@@ -66,6 +69,23 @@ describe('CreatePost Controller', () => {
     // Assert
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new InternalServerError())
+  })
+
+  test('Should return 404 if no user found', async () => {
+    // Arrange
+    const { sut, createPostStub } = makeSut()
+    const fakeRequest = makeFakeRequest()
+
+    jest.spyOn(createPostStub, 'create').mockImplementationOnce(() => {
+      throw new UserNotFoundError('123')
+    })
+
+    // Act
+    const httpResponse = await sut.handle(fakeRequest)
+
+    // Assert
+    expect(httpResponse.statusCode).toBe(404)
+    expect(httpResponse.body).toEqual(new ResourceNotFoundError('User not found for id: 123'))
   })
 })
 
@@ -106,7 +126,8 @@ const makeSut = (): SutTypes => {
 const makeFakeRequest = (): HttpRequest => {
   return {
     body: {
-      message: 'foo_bar'
+      message: 'foo_bar',
+      authorId: '123'
     }
   }
 }

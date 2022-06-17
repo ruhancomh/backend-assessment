@@ -41,4 +41,46 @@ describe('Post Routes', () => {
         expect(res.body.createdAt).toBeTruthy()
       })
   })
+
+  test('Should return 404 on createPost on user not found for authorId', async () => {
+    // Arrange
+    const requestData = {
+      message: 'foo_bar',
+      authorId: '507f191e810c19729de860ea'
+    }
+
+    // Act & Assert
+    await request(app)
+      .post('/api/v1/posts/')
+      .send(requestData)
+      .expect(404)
+      .expect((res) => {
+        expect(res.body).toEqual({
+          message: 'User not found for id: ' + requestData.authorId,
+          name: 'ResourceNotFoundError',
+          statusCode: 404
+        })
+      })
+  })
+
+  test('Should return 500 on createPost on unknow error', async () => {
+    // Arrange
+    const requestData = {
+      message: 'foo_bar',
+      authorId: '1'
+    }
+
+    // Act & Assert
+    await request(app)
+      .post('/api/v1/posts/')
+      .send(requestData)
+      .expect(500)
+      .expect((res) => {
+        expect(res.body).toEqual({
+          message: 'Internal Server Error',
+          name: 'InternalServerError',
+          statusCode: 500
+        })
+      })
+  })
 })

@@ -1,5 +1,7 @@
+import { UserNotFoundError } from '../../../data/errors/user-not-found-error'
 import { CreatePostModel } from '../../../domain/protocols/create-post-model'
 import { ICreatePost } from '../../../domain/usecases/post/create-post'
+import { ResourceNotFoundError } from '../../errors/resource-not-found-error'
 import { responseCreated, responseError } from '../../helpers/http-response-helper'
 import { BaseController } from '../../protocols/base-controller'
 import { HttpRequest } from '../../protocols/http-request'
@@ -37,6 +39,10 @@ export class CreatePostController implements BaseController {
 
       return responseCreated(createPostResponse)
     } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        return responseError(new ResourceNotFoundError(error.message))
+      }
+
       return responseError(error)
     }
   }
