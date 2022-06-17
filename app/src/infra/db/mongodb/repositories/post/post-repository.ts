@@ -1,9 +1,14 @@
 import { DbCreatePostModel } from '../../../../../data/protocols/dtos/db-create-post-model'
+import { ICountPostsByAuthorRepository } from '../../../../../data/protocols/repositories/post/count-posts-by-author-repository'
 import { ICreatePostRepository } from '../../../../../data/protocols/repositories/post/create-post-repository'
 import { IPostModel } from '../../../../../domain/models/post-model'
 import { PostMongoModel } from '../../models/post-model'
 
-export class PostMongoRepository implements ICreatePostRepository {
+export class PostMongoRepository implements ICreatePostRepository, ICountPostsByAuthorRepository {
+  async countByAuthor (authorId: string): Promise<number> {
+    return await PostMongoModel.countDocuments({author: authorId })
+  }
+
   async create (postData: DbCreatePostModel): Promise<IPostModel> {
     const postModel = new PostMongoModel()
 

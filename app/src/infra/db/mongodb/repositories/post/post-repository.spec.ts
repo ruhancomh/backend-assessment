@@ -42,6 +42,45 @@ describe('Post Mongo Repository', () => {
     expect(post.type).toBe(PostTypes.ORIGINAL)
     expect(post.createdAt).toBeTruthy()
   })
+
+  test('Should return zero on countByAuthor if no documents found', async () => {
+    // Arrange
+    const sut = makeSut()
+
+    const userData = new UserMongoModel()
+    userData.username = 'fooBar'
+    await userData.save()
+
+    // Act
+    const count = await sut.countByAuthor(userData.id)
+
+    // Assert
+    expect(count).toBe(0)
+  })
+
+  test('Should return 2 on countByAuthor', async () => {
+    // Arrange
+    const sut = makeSut()
+
+    const userData = new UserMongoModel()
+    userData.username = 'fooBar'
+    await userData.save()
+
+    const postData: DbCreatePostModel = {
+      message: 'foo_bar',
+      authorId: userData.id,
+      type: PostTypes.ORIGINAL
+    }
+
+    await sut.create(postData)
+    await sut.create(postData)
+
+    // Act
+    const count = await sut.countByAuthor(userData.id)
+
+    // Assert
+    expect(count).toBe(2)
+  })
 })
 
 const makeSut = (): PostMongoRepository => {
