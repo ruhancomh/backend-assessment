@@ -1,5 +1,8 @@
 import request from 'supertest'
+import { DbCreatePostModel } from '../../data/protocols/dtos/db-create-post-model'
+import { PostTypes } from '../../domain/enums/post-types'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
+import { PostMongoModel } from '../../infra/db/mongodb/models/post-model'
 import { UserMongoModel } from '../../infra/db/mongodb/models/user-model'
 import app from '../config/app'
 
@@ -24,6 +27,13 @@ describe('User Routes', () => {
 
     await userData.save()
 
+    const postData = new PostMongoModel()
+    postData.author = userData.id
+    postData.message = 'foo_bar'
+    postData.type = PostTypes.ORIGINAL
+
+    await postData.save()
+
     // Act & Assert
     await request(app)
       .get('/api/v1/users/' + String(userData.id))
@@ -32,6 +42,7 @@ describe('User Routes', () => {
       .expect((res) => {
         expect(res.body.id).toBe(userData.id)
         expect(res.body.username).toBe(userData.username)
+        expect(res.body.countPosts).toBe(1)
         expect(res.body.createdAt).toBeTruthy()
         expect(res.body.createdAtFormated).toBeTruthy()
       })

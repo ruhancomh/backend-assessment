@@ -1,5 +1,6 @@
 import { UserNotFoundError } from '../../../data/errors/user-not-found-error'
 import { IUserModel } from '../../../domain/models/user-model'
+import { ICountPostsByAuthor } from '../../../domain/usecases/post/count-posts-by-author'
 import { IGetUser } from '../../../domain/usecases/user/get-user'
 import { InternalServerError } from '../../errors/internal-server-error'
 import { ResourceNotFoundError } from '../../errors/resource-not-found-error'
@@ -21,6 +22,19 @@ describe('GetUser Controller', () => {
     expect(getSpy).toBeCalledWith('507f191e810c19729de860ea')
   })
 
+  test('Should call countPostsByAuthor with correct userId', async () => {
+    // Arrange
+    const { sut, countPostsByAuthorStub } = makeSut()
+    const getSpy = jest.spyOn(countPostsByAuthorStub, 'count')
+    const fakeRequest = makeFakeRequest()
+
+    // Act
+    await sut.handle(fakeRequest)
+
+    // Assert
+    expect(getSpy).toBeCalledWith('507f191e810c19729de860ea')
+  })
+
   test('Should return an user and 200 on success', async () => {
     // Arrange
     const { sut } = makeSut()
@@ -28,6 +42,7 @@ describe('GetUser Controller', () => {
     const expectedUser: IUserResponse = {
       id: '507f191e810c19729de860ea',
       username: 'foo_bar',
+      countPosts: 2,
       createdAt: '2022-06-13T13:00:00.000Z',
       createdAtFormated: 'Jun 13, 2022'
     }
@@ -80,6 +95,7 @@ describe('GetUser Controller', () => {
 interface SutTypes {
   sut: GetUserController
   getUserStub: IGetUser
+  countPostsByAuthorStub: ICountPostsByAuthor
 }
 
 class GetUserStub implements IGetUser {
@@ -92,12 +108,20 @@ class GetUserStub implements IGetUser {
   }
 }
 
+class CountPostsByAuthorStub implements ICountPostsByAuthor {
+  async count (authorId: string): Promise<number> {
+    return 2
+  }
+}
+
 const makeSut = (): SutTypes => {
   const getUserStub = new GetUserStub()
+  const countPostsByAuthorStub = new CountPostsByAuthorStub()
 
   return {
-    sut: new GetUserController(getUserStub),
-    getUserStub: getUserStub
+    sut: new GetUserController(getUserStub, countPostsByAuthorStub),
+    getUserStub: getUserStub,
+    countPostsByAuthorStub: countPostsByAuthorStub
   }
 }
 
