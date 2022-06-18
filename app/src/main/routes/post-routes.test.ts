@@ -255,6 +255,106 @@ describe('Post Routes', () => {
         })
       })
   })
+
+  test('Should return 200 and a array posts on findPosts with success without params', async () => {
+    // Arrange
+    const user = await createUser('fooBar')
+    await createBulkPosts(user.id, 20)
+
+    // Act & Assert
+    await request(app)
+      .get('/api/v1/posts')
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.length).toBe(10)
+      })
+  })
+
+  test('Should return 200 and a array posts on findPosts with success with params', async () => {
+    // Arrange
+    const user = await createUser('fooBar')
+    await createBulkPosts(user.id, 20)
+
+    const page: number = 2
+    const perPage: number = 5
+    const userId: string = user.id
+    const startDate = '2022-06-10T00:00:00.000Z'
+
+    const endDateAux = new Date()
+    endDateAux.setHours(23, 59, 59, 999)
+    const endDate = endDateAux.toISOString()
+
+    // Act & Assert
+    await request(app)
+      .get(`/api/v1/posts?page=${page}&perPage=${perPage}&userId=${userId}&startDate=${startDate}&endDate=${endDate}`)
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.length).toBe(5)
+      })
+  })
+
+  test('Should return 200 and a empty array posts on findPosts with success with out of range dates', async () => {
+    // Arrange
+    const user = await createUser('fooBar')
+    await createBulkPosts(user.id, 20)
+
+    const page: number = 2
+    const perPage: number = 5
+    const userId: string = user.id
+    const startDate = '2022-06-10T00:00:00.000Z'
+    const endDate = '2022-06-10T01:00:00.000Z'
+
+    // Act & Assert
+    await request(app)
+      .get(`/api/v1/posts?page=${page}&perPage=${perPage}&userId=${userId}&startDate=${startDate}&endDate=${endDate}`)
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.length).toBe(0)
+      })
+  })
+
+  test('Should return 200 and a array posts on findPosts with success without dates', async () => {
+    // Arrange
+    const user = await createUser('fooBar')
+    await createBulkPosts(user.id, 20)
+
+    const page: number = 2
+    const perPage: number = 8
+    const userId: string = user.id
+
+    // Act & Assert
+    await request(app)
+      .get(`/api/v1/posts?page=${page}&perPage=${perPage}&userId=${userId}`)
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.length).toBe(8)
+      })
+  })
+
+  test('Should return 200 and a array posts on findPosts with success without dates and user', async () => {
+    // Arrange
+    const user = await createUser('fooBar')
+    await createBulkPosts(user.id, 5)
+
+    const userTwo = await createUser('fooBarBar')
+    await createBulkPosts(userTwo.id, 5)
+
+    const page: number = 1
+    const perPage: number = 10
+
+    // Act & Assert
+    await request(app)
+      .get(`/api/v1/posts?page=${page}&perPage=${perPage}`)
+      .send()
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.length).toBe(10)
+      })
+  })
 })
 
 async function createBulkPosts (userId: string, qtd: number): Promise<void> {

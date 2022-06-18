@@ -58,9 +58,10 @@ describe('Post Mongo Repository', () => {
     originalPostData.type = PostTypes.ORIGINAL
 
     await originalPostData.save()
+    const originalPostId: string = originalPostData.id
 
     const postData: DbCreatePostModel = {
-      originalPostId: originalPostData.id,
+      originalPostId: originalPostId,
       authorId: userData.id,
       type: PostTypes.ORIGINAL
     }
@@ -72,7 +73,7 @@ describe('Post Mongo Repository', () => {
     expect(post).toBeTruthy()
     expect(post.id).toBeTruthy()
     expect(post.author.toString()).toBe(postData.authorId)
-    expect(post.originalPost).toBe(originalPostData.id)
+    expect(String(post.originalPost)).toBe(originalPostId)
     expect(post.type).toBe(PostTypes.ORIGINAL)
     expect(post.createdAt).toBeTruthy()
   })

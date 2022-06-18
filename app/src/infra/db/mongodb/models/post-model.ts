@@ -18,6 +18,10 @@ const postSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  originalPost: {
+    type: Schema.Types.ObjectId,
+    ref: 'Post'
   }
 },
 {
