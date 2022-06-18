@@ -38,8 +38,11 @@ export class DbRepostPost implements IRepostPost {
       throw new PostNotFoundError(postData.orginalPostId)
     }
 
-    if (this.isSameAuthor(author.id, originalPost.id)) {
-      throw new RepostingSelfPostError(author.id, originalPost.id)
+    const authorId: string = String(author.id)
+    const orginalPostAuthorId: string = String(originalPost.author)
+
+    if (this.isSameAuthor(authorId, orginalPostAuthorId)) {
+      throw new RepostingSelfPostError(authorId, originalPost.id)
     }
 
     if (originalPost?.type === PostTypes.REPOST) {

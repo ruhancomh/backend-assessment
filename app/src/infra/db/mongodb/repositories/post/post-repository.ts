@@ -33,6 +33,7 @@ IFindPostByIdRepository {
     postModel.message = postData.message
     postModel.type = postData.type
     postModel.author = postData.authorId
+    postModel.originalPost = postData.originalPostId
 
     return await postModel.save()
   }
