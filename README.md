@@ -238,7 +238,7 @@ RESPONSE
 
 ## Self-critique & Scaling
 - **Increase the code coverage:** Although I have wrote many tests, there still many corner cases that need to be fully tested to ensure maximum security about the app behaviour.
-- **Improve app documentation:** I wrote the API documentation in the README, but a better solution would be used a tool to standardize and optimize the documentation like Swagger.
+- **Improve app documentation:** I wrote the API documentation in the README, but a better solution would be used a tool to standarize and optimize the documentation like Swagger.
 - **Add observability tolls:** Although the API have many tests, we still need some level of observability, to ensure the healthiness of the application. We can add some logs in key points. Add some tools to keep tracking about the app performance (response time, error rate, throughput, etc) like DataDog or NewRelic for example. This tools can warn us  about any problem happen on app.
 - **Improve app performance:** As the use of the application increase, we need to improve the performance. We can add some indexes on the database to improve our query time. We can use data-replication rather than reference to improver our querys, like on quote references to originalPost for example. Another strategie is to add some cache level on the application, with that we can reduce the number of querys on databse. We can use a shared cached with Redis for example. Some routines that can be cached for example are: the user data most recently or most used, the post data that are most replyed or quoted.
 - **Improve the app availability and healthiness:** 
